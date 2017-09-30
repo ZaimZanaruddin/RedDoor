@@ -1,7 +1,14 @@
-/*************************************************
- * Public Constants
- *************************************************/
+/*
+ * Episode: The Gift
+ * Puzzle: Light-House Puzzle
+ * Code and Documented by: Zaim Zanaruddin
+ * Description: Lighthouses will have 3 light sensors to detect light. Players will have to shine 3 flashlights to activate puzzle
+ * Last Updated: September 30th, 2017
+ * All rights reserved to Red Door Escape Room
+ * 
+ */
 
+// Define Various notes for pitches
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
@@ -92,51 +99,76 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
-int cuckoo = 11;
-int bird = 13;
+
+
+/*
+ * Initialize Pin Assignments
+ * LRD: Light Sensors (digital pin ; input)
+ * Light: LED Lights (digital pin ; output)
+ * cuckoo: Sound (digital pin ; output)
+ * bird: Motor (digital pin ; output) 
+ * relay: Maglock (digital pin ; output)
+ */
+const int cuckoo = 11;
+const int bird = 13;
+const int light1=2;
+const int LDR1 = 3;
+const int light2=4;
+const int LDR2 = 5;
+const int light3= 6;
+const int LDR3 = 7;
+const int relay =9;
+
+
+//Initialize melody tone
 int melody[] = {
   NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4
 };
 int noteDurations[] = {
   4, 8, 8, 4, 4, 4, 4, 4
 };
- 
- int light1=2;
- int LDR1 = 3;
- int light2=4;
- int LDR2 = 5;
- int light3= 6;
- int LDR3 = 7;
- int relay =9;
 
- void(* resetFunc) (void) = 0;//declare reset function at address 0
- // initialize the serial port
- // and declare inputs and outputs
+
  void setup() 
  {
+   //Set up LEDS
    pinMode(light1,OUTPUT);
-   pinMode(LDR1, INPUT);
    pinMode(light2, OUTPUT);
-   pinMode(LDR2, INPUT);
-  pinMode(light3, OUTPUT);
-   pinMode(LDR3, INPUT);
-   pinMode(relay, OUTPUT);
-  digitalWrite(relay,HIGH);
-   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(cuckoo, OUTPUT);
-  pinMode(bird, OUTPUT);
-   Serial.begin(9600);
+   pinMode(light3, OUTPUT);
+  
+
+   //Set up Light Sensors
+    pinMode(LDR1, INPUT);
+    pinMode(LDR2, INPUT);
+    pinMode(LDR3, INPUT);
    
+   //Set up Relay
+   pinMode(relay, OUTPUT);
+   digitalWrite(relay,HIGH);
+
+   //Set up Bird activation and sound
+   pinMode(cuckoo, OUTPUT);
+   pinMode(bird, OUTPUT);
+   
+   //Serial Port for debugging
+   Serial.begin(9600);           
  }
  
+
+
+ 
+ /*
+  * Main Function of the program
+  * Detects if all three light sensors are activated
+  * If light is detected, LED for specific lighthouse will light up
+  */
  void loop() {
-
-
-
+  
+ //Debugging for Sensor 1
  Serial.print("Light1:");
  Serial.println(digitalRead(LDR1));
 
-  if(digitalRead(LDR1) ==LOW)
+  if(digitalRead(LDR1) ==LOW)     //Checking Sensor 1
   {
     digitalWrite(light1, HIGH);
   }
@@ -145,10 +177,12 @@ int noteDurations[] = {
     digitalWrite(light1,LOW);
   }
   
+
+ //Debugging for Sensor 2
  Serial.print("Light2:");
  Serial.println(digitalRead(LDR2));
  
-  if(digitalRead(LDR2) ==LOW)
+  if(digitalRead(LDR2) ==LOW)    //Checking Sensor 2
   {
     digitalWrite(light2, HIGH);
   }
@@ -158,10 +192,12 @@ int noteDurations[] = {
   }
   
   
+ 
+ //Debugging for Sensor 3
  Serial.print("Light3:");
  Serial.println(digitalRead(LDR3));
 
- if(digitalRead(LDR3) ==LOW)
+ if(digitalRead(LDR3) ==LOW)      // //Checking Sensor 3
   {
     digitalWrite(light3, HIGH);
   }
@@ -171,26 +207,24 @@ int noteDurations[] = {
   }
   
 
-if(digitalRead(LDR1) ==LOW && digitalRead(LDR2) ==LOW && digitalRead(LDR3) ==LOW)
+/*
+ * Checks all three sensors
+ * If LOW, releases bird, plays audio, and unlocks maglock
+ */
+if(digitalRead(LDR1) ==LOW && digitalRead(LDR2) ==LOW && digitalRead(LDR3) ==LOW)    
 {
  
-  
- 
- Serial.println("Door UNLOCKED");
-
- 
+ //Releases Bird from its Reseting State
  digitalWrite(cuckoo, HIGH);
-     // turn the LED on (HIGH is the voltage level)
-  delay(2000);  
-  digitalWrite(cuckoo, LOW);// wait for a second
-      // turn the LED off by making the voltage LOW
-  delay(1000);
+ // turn the LED on (HIGH is the voltage level)
+ delay(2000);  
+ digitalWrite(cuckoo, LOW); // wait for a second
+ // turn the LED off by making the voltage LOW
+ delay(1000);
 
-   
+  //Plays Tone 
   for (int thisNote = 0; thisNote < 5; thisNote++) 
   {
-
-
       int noteDuration = 1000 / noteDurations[thisNote];
       tone(12, melody[thisNote], noteDuration);
       
@@ -199,18 +233,11 @@ if(digitalRead(LDR1) ==LOW && digitalRead(LDR2) ==LOW && digitalRead(LDR3) ==LOW
       noTone(12);
   }
  
-
+  //Unlocks Maglock for 3 seconds
   digitalWrite(relay, LOW);
   delay(3000);
   digitalWrite(relay, HIGH);
 
-   
-
-
-  Serial.print("End of Loop");
-
  }
 
-
-Serial.println();
 }
