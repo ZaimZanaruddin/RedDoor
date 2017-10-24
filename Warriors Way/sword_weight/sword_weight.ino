@@ -20,11 +20,16 @@
  * 
  */
 
-HX711 scale(3, 2);
+HX711 Lscale(6, 5);
+HX711 Rscale(4, 2);
 
+float temp1;
+float temp2;
+float final_temp;
+float tempf;
 
-const int relay = 4; 
-const int reset_button = 5;
+const int relay = 12; 
+const int reset_button = 8;
 
 float low_weight = 10.0; //Need to change 
 float high_weight = 15.0; //Need to change
@@ -46,10 +51,15 @@ asm volatile ("  jmp 0");
 void setup() {
   //Serial Port for debugging
   Serial.begin(9600);
+   Serial.println("HX711 scale demo");
+  
 
   //Calibrate the Sensor 
-  scale.set_scale(calibration_factor)l
-  scale_tare();
+  Lscale.set_scale(calabration_factor);
+  Lscale.tare();
+
+  Rscale.set_scale(calabration_factor);
+  Rscale.tare();
  
   //Set up relay for trigger activation
   pinMode(relay, OUTPUT);
@@ -68,20 +78,32 @@ void loop() {
 
     //Debugging Purposes
   Serial.print("Reading1: ");
-  Serial.print(scale.get_units(3), 1); 
+  Serial.print(Lscale.get_units(3), 1); 
   Serial.println();
 
+   Serial.print("Reading1: ");
+  Serial.print(Rscale.get_units(3), 1); 
+  Serial.println();
 
-  if((scale.get_units(3) > low_weight) && (scale.get_units(3) < high_weight));
-  {
-    //Trigger relay 
-    digitalWrite(relay, HIGH);
-    delay(2000);
-    digialWrite(relY, LOW);
-  }
+  temp1 = (Lscale.get_units(3), 1);
+  temp2 = (Rscale.get_units(3), 1);
+
+  
+  tempf = abs((temp1+temp2)); 
+
+   Serial.print("temp:");
+    Serial.println(tempf);
+
+
+  final_temp = tempf/2;
+
+  Serial.print("Final Weight: ");
+  Serial.print(final_temp);
+  Serial.println();
 
 /**********************************************************************************************************/
 
+/*
 //Checks input button, if high call reset function
 if(digitalRead(reset_button) == LOW)
 {
@@ -91,6 +113,6 @@ if(digitalRead(reset_button) == LOW)
  
 }
 
-
+*/
 
 }

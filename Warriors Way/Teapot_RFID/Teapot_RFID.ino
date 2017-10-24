@@ -63,6 +63,7 @@ void setup() {
  pinMode(nfc2, OUTPUT);
  pinMode(nfc3, OUTPUT);
  pinMode(relay, OUTPUT);
+ digitalWrite(relay, HIGH);
 
   //SPI COMMUNICATION for rfid reader
  SPI.begin();
@@ -124,10 +125,11 @@ void(* resetFunc) (void) = 0;
 
 void loop(){
 
+
 //Reads and checks 1st reader
 read32bitValue(0, nfc0);
  temp0 = readCard(mfrc522_0,0);
- if((temp0.equals("65656bc9")))
+ if((temp0.equals("f6ff2412")))
  {
   flag0 = 1;
   test0 = 0;
@@ -143,12 +145,13 @@ read32bitValue(0, nfc0);
   flag0 = -1;
   test0 = 0;
  }
-  
+
+ 
  
  //Reads and checks 2nd reader
  read32bitValue(0, nfc1);
  temp1 = readCard(mfrc522_1,1);
- if((temp1.equals("b5ee6ac9")))
+ if((temp1.equals("90ed6c4d")))
  {
   flag1 = 1;
   test1 = 0;
@@ -164,11 +167,12 @@ read32bitValue(0, nfc0);
  }
  
  
+
  
  //Reads and checks 3rd reader
  read32bitValue(0, nfc2);
  temp2 = readCard(mfrc522_2,2);
- if((temp2.equals("a5646bc9")))
+ if((temp2.equals("c02c2c83")))
  {
   flag2 = 1;
   test2 = 0;
@@ -183,11 +187,13 @@ read32bitValue(0, nfc0);
   test2 = 0;
  }
 
+
+
  
  //Reads and checks 4th reader
  read32bitValue(0, nfc3);
  temp3 = readCard(mfrc522_3,3);
- if((temp3.equals("05656bc9")))
+ if((temp3.equals("4509fbd1")))
  {
   flag3 = 1;
   test3 = 0;
@@ -203,6 +209,12 @@ read32bitValue(0, nfc0);
  }
  
 
+Serial.print("Flags: ");
+Serial.println(flag0);
+Serial.println(flag1);
+Serial.println(flag2);
+Serial.println(flag3);
+
 
 Serial.println("................................");
 
@@ -213,9 +225,9 @@ if((flag0==1) && (flag1==1) && (flag2 == 1) && (flag3 == 1))
   Serial.println("FINSIHED");
   
   //Activate Maglock
-  digitalWrite(relay,HIGH);
-  delay(2000);
   digitalWrite(relay,LOW);
+  delay(2000);
+  digitalWrite(relay,HIGH);
  
 }
 
