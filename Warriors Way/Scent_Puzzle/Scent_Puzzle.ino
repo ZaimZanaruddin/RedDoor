@@ -14,7 +14,7 @@ void setup() {
   Serial.begin(9600);
 
   pinMode(relay, OUTPUT);
-  digitalWrite(relay,HIGH);
+  digitalWrite(relay,LOW);
   
   
 }
@@ -31,15 +31,18 @@ void loop() {
   uchar* id4 = serNum4;
 
   
-  if( (id1[0]==0x05 && id1[1]==0x65 && id1[2]==0x6B && id1[3]==0xC9) && (id2[0]==0xA5 && id2[1]==0x64 && id2[2]==0x6B && id2[3]==0xC9) && (id3[0]==0x65 && id3[1]==0x65 && id3[2]==0x6B && id3[3]==0xC9) && (id4[0]==0xB5 && id4[1]==0xEE && id4[2]==0x6A && id4[3]==0xC9)  ) 
+  if( (id1[0]==0x05 && id1[1]==0x65 && id1[2]==0x6B && id1[3]==0xC9) && (id2[0]==0xA5 && id2[1]==0x64 && id2[2]==0x6B && id2[3]==0xC9) && (id3[0]==0xB5 && id3[1]==0xEE && id3[2]==0x6A && id3[3]==0xC9) && (id4[0]==0x65 && id4[1]==0x65 && id4[2]==0x6B && id4[3]==0xC9)  ) 
     {
-      digitalWrite(relay,LOW);
+      
+      Serial.println("Success");
+      digitalWrite(relay,HIGH);
+      delay(2000);
       
       
     }
    else
    {
-    digitalWrite(relay,HIGH);
+    digitalWrite(relay,LOW);
    }
     
 }
