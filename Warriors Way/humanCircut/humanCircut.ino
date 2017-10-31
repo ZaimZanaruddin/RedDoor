@@ -44,9 +44,9 @@ Adafruit_VS1053_FilePlayer musicPlayer =
   // create shield-example object!
   Adafruit_VS1053_FilePlayer(SHIELD_RESET, SHIELD_CS, SHIELD_DCS, DREQ, CARDCS);
 
-const int doorRelay = 5;
-const int humanCircut= 2;
-const int input =16;
+const int doorRelay = 2;
+const int humanCircut= 5;
+
 
 
 void setup() {
